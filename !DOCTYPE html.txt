@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Age Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+            transition: background 0.3s, color 0.3s;
+        }
+        .container {
+            max-width: 400px;
+            margin: auto;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.2);
+        }
+        input, button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            font-size: 16px;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .dark-mode {
+            background-color: #333;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <button onclick="toggleDarkMode()">🌙 Toggle Dark Mode</button>
+    
+    <h2>Live Age Calculator</h2>
+    <div class="container">
+        <label for="dob">Enter your Date of Birth:</label>
+        <input type="date" id="dob" onchange="startAgeCounter()">
+        <h3 id="liveAge">Your Age: --</h3>
+    </div>
+
+    <h2>Age Difference Calculator</h2>
+    <div class="container">
+        <label for="dob1">Person 1 DOB:</label>
+        <input type="date" id="dob1">
+        <label for="dob2">Person 2 DOB:</label>
+        <input type="date" id="dob2">
+        <button onclick="calculateDifference()">Calculate Difference</button>
+        <h3 id="ageDiff">Difference: --</h3>
+    </div>
+
+    <script>
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+        }
+        if (localStorage.getItem('darkMode') === 'true') {
+            document.body.classList.add('dark-mode');
+        }
+        
+        function startAgeCounter() {
+            setInterval(updateAge, 1000);
+        }
+        function updateAge() {
+            let dob = document.getElementById("dob").value;
+            if (!dob) return;
+            let dobDate = new Date(dob);
+            let now = new Date();
+            let diff = now - dobDate;
+            let ageYears = Math.floor(diff / (1000 * 60 * 60 * 24 * 365.25));
+            let ageMonths = now.getMonth() - dobDate.getMonth();
+            let ageDays = now.getDate() - dobDate.getDate();
+            document.getElementById("liveAge").innerText = `Your Age: ${ageYears} Years, ${ageMonths} Months, ${ageDays} Days`;
+        }
+        
+        function calculateDifference() {
+            let dob1 = new Date(document.getElementById("dob1").value);
+            let dob2 = new Date(document.getElementById("dob2").value);
+            if (!dob1 || !dob2) {
+                alert("Please enter both dates!");
+                return;
+            }
+            let diff = Math.abs(dob1 - dob2);
+            let years = Math.floor(diff / (1000 * 60 * 60 * 24 * 365.25));
+            document.getElementById("ageDiff").innerText = `Difference: ${years} Years`;
+        }
+    </script>
+</body>
+</html>
